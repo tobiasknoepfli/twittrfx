@@ -18,7 +18,7 @@ public class HeaderUI extends HBox {
     private void initializeControls() {
         setPrefHeight(50);
 
-        Label titleLabel = new Label("Header");
+        Label titleLabel = new Label("Headerbar");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleLabel.setTextFill(Color.WHITE);
 
