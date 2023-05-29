@@ -22,7 +22,7 @@ public class HeaderUI extends HBox {
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleLabel.setTextFill(Color.WHITE);
 
-        setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+        setBackground(new Background(new BackgroundFill(Color.DARKORCHID, null, null)));
 
         setPadding(new Insets(10));
         setSpacing(10);
