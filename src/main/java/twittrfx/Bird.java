@@ -1,6 +1,6 @@
 package twittrfx;
 
-public class BirdData {
+public class Bird {
     private String name;
     private String image;
     private String shortDescription;
@@ -18,10 +18,10 @@ public class BirdData {
     private String populationStatus;
     private String incubationPeriod;
 
-    public BirdData(String name, String image, String shortDescription, String populationSize, String maximumLifeSpanInYears,
-                    String topSpeedInKmh, String weight, String length, String wingspan, String continents,
-                    String diet, String seasonalBehavior, String independentAge, String populationTrend,
-                    String populationStatus, String incubationPeriod) {
+    public Bird(String name, String image, String shortDescription, String populationSize, String maximumLifeSpanInYears,
+                String topSpeedInKmh, String weight, String length, String wingspan, String continents,
+                String diet, String seasonalBehavior, String independentAge, String populationTrend,
+                String populationStatus, String incubationPeriod) {
         this.name = name;
         this.image = image;
         this.shortDescription = shortDescription;
