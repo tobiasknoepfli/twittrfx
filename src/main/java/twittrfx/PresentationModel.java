@@ -7,8 +7,8 @@ import javafx.collections.ObservableList;
 public class PresentationModel {
 
   private final StringProperty applicationTitle = new SimpleStringProperty("JavaFX App");
-  private final ObjectProperty<Bird> selectedBird = new SimpleObjectProperty<>();
-  private final ObservableList<Bird> birdList = FXCollections.observableArrayList();
+  private final ObjectProperty<BirdData> selectedBird = new SimpleObjectProperty<>();
+  private final ObservableList<BirdData> birdList = FXCollections.observableArrayList();
 
   public String getApplicationTitle() {
     return applicationTitle.get();
@@ -22,19 +22,19 @@ public class PresentationModel {
     this.applicationTitle.set(applicationTitle);
   }
 
-  public Bird getSelectedBird() {
+  public BirdData getSelectedBird() {
     return selectedBird.get();
   }
 
-  public ObjectProperty<Bird> selectedBirdProperty() {
+  public ObjectProperty<BirdData> selectedBirdProperty() {
     return selectedBird;
   }
 
-  public void setSelectedBird(Bird selectedBird) {
+  public void setSelectedBird(BirdData selectedBird) {
     this.selectedBird.set(selectedBird);
   }
 
-  public ObservableList<Bird> getBirdList() {
+  public ObservableList<BirdData> getBirdList() {
     return birdList;
   }
 }
