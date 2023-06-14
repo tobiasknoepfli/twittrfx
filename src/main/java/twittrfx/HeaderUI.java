@@ -19,10 +19,10 @@ public class HeaderUI extends HBox {
         setPrefHeight(50);
 
         Label titleLabel = new Label("Header");
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        titleLabel.setFont(Font.font("Calibri", FontWeight.BOLD, 20));
         titleLabel.setTextFill(Color.WHITE);
 
-        setBackground(new Background(new BackgroundFill(Color.DARKORCHID, null, null)));
+        setBackground(new Background(new BackgroundFill(Color.DARKBLUE, null, null)));
 
         setPadding(new Insets(10));
         setSpacing(10);
