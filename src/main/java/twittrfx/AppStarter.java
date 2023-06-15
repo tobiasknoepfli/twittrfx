@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class AppStarter extends Application {
     public static double WINDOW_WIDTH = 1400;
-    public static double WINDOW_HEIGHT= 1000;
+    public static double WINDOW_HEIGHT = 1000;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

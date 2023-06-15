@@ -16,12 +16,12 @@ import java.util.Stack;
 
 import static twittrfx.AppStarter.WINDOW_WIDTH;
 
-public class ApplicationUI extends StackPane {
+public class ApplicationUI extends HBox {
 
     private final PresentationModel model;
-    private  Text rowCountText;
+    private Text rowCountText;
     private Text highestSpeedText;
-    private  Text titleText;
+    private Text titleText;
 
     public ApplicationUI(PresentationModel model) {
         this.model = model;
@@ -51,15 +51,15 @@ public class ApplicationUI extends StackPane {
 
         //set grid pane left
         GridPane leftBasicGrid = new GridPane();
-        leftBasicGrid.setPrefWidth(WINDOW_WIDTH/2);
-        leftBasicGrid.setPadding(new Insets(5,5,10,10));
+        leftBasicGrid.setPrefWidth(WINDOW_WIDTH / 2);
+        leftBasicGrid.setPadding(new Insets(5, 5, 10, 10));
         leftBasicGrid.setHgap(10);
         leftBasicGrid.setVgap(1);
 
         //set basic grid pane right
         GridPane rightBasicGrid = new GridPane();
-        rightBasicGrid.setPrefWidth(WINDOW_WIDTH/2);
-        rightBasicGrid.setPadding(new Insets(5,10,10,5));
+        rightBasicGrid.setPrefWidth(WINDOW_WIDTH / 2);
+        rightBasicGrid.setPadding(new Insets(5, 10, 10, 5));
         rightBasicGrid.setHgap(2);
         rightBasicGrid.setVgap(1);
 
@@ -74,29 +74,27 @@ public class ApplicationUI extends StackPane {
         updateRowCountText(birdList);
         updateHighestSpeedText(birdList);
 
-
         //populate leftBasicGrid
-        leftBasicGrid.add(new TitleTextUI(""),0,0);
-        leftBasicGrid.add(titleText,0,1,2,1);
-        leftBasicGrid.add(new CategoryTextUI("Amount of bird species:"),0,2);
-        leftBasicGrid.add(rowCountText,1,2);
-        leftBasicGrid.add(new CategoryTextUI("Highest top speed:"),0,3);
-        leftBasicGrid.add(highestSpeedText,1,3);
-        leftBasicGrid.add(new TitleTextUI(""),0,4);
-        leftBasicGrid.add(birdTable,0,5,3,1);
+        leftBasicGrid.add(new TitleTextUI(""), 0, 0);
+        leftBasicGrid.add(titleText, 0, 1, 2, 1);
+        leftBasicGrid.add(new CategoryTextUI("Amount of bird species:"), 0, 2);
+        leftBasicGrid.add(rowCountText, 1, 2);
+        leftBasicGrid.add(new CategoryTextUI("Highest top speed:"), 0, 3);
+        leftBasicGrid.add(highestSpeedText, 1, 3);
+        leftBasicGrid.add(new TitleTextUI(""), 0, 4);
+        leftBasicGrid.add(birdTable, 0, 5, 3, 1);
 
         //add children to windowFrame
-        windowFrame.getItems().addAll(leftBasicGrid,rightBasicGrid);
+        windowFrame.getItems().addAll(leftBasicGrid, rightBasicGrid);
 
         //add headerBar
         HeaderUI header = new HeaderUI();
 
         //create VBox to hold HeaderBar and SplitPane
-        VBox rootBox = new VBox(headerBar,windowFrame);
+        VBox rootBox = new VBox(headerBar, windowFrame);
 
         //display windowFrame
         getChildren().add(rootBox);
-
 
 
 //        //add texts
@@ -222,7 +220,7 @@ public class ApplicationUI extends StackPane {
                 .mapToDouble(bird -> Double.parseDouble(bird.getTopSpeedInKmh()))
                 .max()
                 .orElse(0.0);
-        highestSpeedText.setText(highestSpeed +" km/h");
+        highestSpeedText.setText(highestSpeed + " km/h");
         getStyleClass().add("category-text");
     }
 
