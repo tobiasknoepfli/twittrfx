@@ -8,7 +8,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class AppStarter extends Application {
-
+    public static double WINDOW_WIDTH = 1400;
+    public static double WINDOW_HEIGHT= 1000;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -20,8 +21,8 @@ public class AppStarter extends Application {
         primaryStage.titleProperty().bind(pm.applicationTitleProperty());
         primaryStage.setScene(scene);
 
-        primaryStage.setWidth(1400);
-        primaryStage.setHeight(1000);
+        primaryStage.setWidth(WINDOW_WIDTH);
+        primaryStage.setHeight(WINDOW_HEIGHT);
 
         primaryStage.show();
     }

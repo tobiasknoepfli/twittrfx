@@ -8,6 +8,9 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.List;
 
+import static twittrfx.AppStarter.WINDOW_HEIGHT;
+import static twittrfx.AppStarter.WINDOW_WIDTH;
+
 public class TableUI extends BorderPane {
 
     private TableView<Bird> table;
@@ -20,26 +23,27 @@ public class TableUI extends BorderPane {
 
     private void initializeControls() {
         table = new TableView<>();
-        table.setMaxWidth(600);
-        table.setPrefHeight(800);
+        table.setPrefWidth(WINDOW_WIDTH);
+        table.setPrefHeight(WINDOW_HEIGHT * 0.75);
 
         TableColumn<Bird, String> column1 = new TableColumn<>("Name");
         column1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        column1.setPrefWidth(200);
+        column1.setPrefWidth(WINDOW_WIDTH / 6);
 
         TableColumn<Bird, String> column2 = new TableColumn<>("Population Trend");
         column2.setCellValueFactory(new PropertyValueFactory<>("populationTrend"));
-        column2.setPrefWidth(200);
+        column2.setPrefWidth(WINDOW_WIDTH / 6);
 
         TableColumn<Bird, String> column3 = new TableColumn<>("Population Status");
         column3.setCellValueFactory(new PropertyValueFactory<>("populationStatus"));
-        column3.setPrefWidth(200);
+        column3.setPrefWidth(WINDOW_WIDTH / 6);
 
         table.getColumns().addAll(column1, column2, column3);
     }
 
     private void populateTable(List<Bird> birdList) {
         table.getItems().addAll(birdList);
+        getStyleClass().add("table-text");
     }
 
     private void layoutControls() {
