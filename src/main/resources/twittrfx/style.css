@@ -13,7 +13,10 @@
 .table-text{
     -fx-font-family: "Candara Light";
 }
-
+.bird-title-label {
+    -fx-font-size: 27;
+    -fx-font-weight: bold;
+}
 
 
 

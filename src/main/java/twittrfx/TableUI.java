@@ -47,8 +47,11 @@ public class TableUI extends BorderPane {
     }
 
     private void layoutControls() {
-        setBottom(table);
-        setAlignment(table, Pos.BOTTOM_LEFT);
+        setCenter(table);
+        setAlignment(table, Pos.CENTER);
     }
 
+    public TableView<Bird> getTableView() {
+        return table;
+    }
 }
