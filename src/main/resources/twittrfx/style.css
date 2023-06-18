@@ -3,21 +3,33 @@
     -fx-font-family: "Candara";
     -fx-font-size: 12
 }
+
 .title-text {
     -fx-font-size: 27;
     -fx-font-weight: bold;
+    -fx-font-family: "Candara";
 }
+
 .category-text {
     -fx-font-size: 14;
 }
-.table-text{
+
+.table-text {
     -fx-font-family: "Candara Light";
 }
+
 .bird-title-label {
     -fx-font-size: 27;
     -fx-font-weight: bold;
+    -fx-font-family: "Candara";
 }
 
+.text-field {
+    -fx-background-color: "transparent";
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: "00000f";
+    -fx-font-family: "Candara Light";
+}
 
 
 

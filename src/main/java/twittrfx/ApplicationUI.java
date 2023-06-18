@@ -1,9 +1,6 @@
 package twittrfx;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
@@ -12,9 +9,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static twittrfx.AppStarter.WINDOW_HEIGHT;
@@ -23,11 +20,28 @@ import static twittrfx.AppStarter.WINDOW_WIDTH;
 public class ApplicationUI extends HBox {
 
     private final PresentationModel model;
-    private Text rowCountText;
-    private Text highestSpeedText;
-    private Text titleText;
+    private Text rowCountText, highestSpeedText, titleText;
     private Label birdNameLabel;
     private ImageView birdImage;
+    private HeaderUI headerBar;
+    private SplitPane splitPane;
+    private VBox leftPane, rightPane;
+    private VBox leftOverview;
+    private HBox rightOverview;
+    private TitleTextUI leftTitle;
+    private GridPane subtitleBox;
+    private GridPane rightTitleBox;
+    private Label rightBirdTitle;
+    private TableUI birdTable;
+    private Label rightSubtitleContinents;
+    private Image birdImg;
+    private GridPane rightTextFieldGrid;
+    private List<String> rightTFGridTitle;
+    private List<Bird> birdList;
+    private List<TextField> birdProperties;
+    private List<String> rightTFGridTitleCol3;
+    private ArrayList<TextField> birdProperties2;
+    private ColumnConstraints col1, col2, col3, col4;
 
 
     public ApplicationUI(PresentationModel model) {
@@ -46,146 +60,179 @@ public class ApplicationUI extends HBox {
     }
 
     private void initializeControls() {
+        headerBar = new HeaderUI();
+
+        splitPane = new SplitPane();
+
+        leftPane = new VBox();
+        leftOverview = new VBox();
+        subtitleBox = new GridPane();
+
+        rightPane = new VBox();
+        rightOverview = new HBox();
+        rightTitleBox = new GridPane();
+        rightBirdTitle = new Label();
+        rightSubtitleContinents = new Label();
+        rightTextFieldGrid = new GridPane();
+
+        leftTitle = new TitleTextUI("Birds of Switzerland");
+
         rowCountText = new CategoryTextUI();
         highestSpeedText = new CategoryTextUI();
-        titleText = new TitleTextUI("Birds of Switzerland");
-        birdNameLabel = new Label();
-        birdImage = new ImageView();
-        birdImage.setFitWidth(WINDOW_WIDTH / 4);
-        birdImage.setPreserveRatio(true);
-    }
 
-    private void layoutControls() {
-        //set basic layout with a split pane
-        SplitPane windowFrame = new SplitPane();
-        windowFrame.setDividerPositions(0.5);
-
-        //set HeaderBar
-        HeaderUI headerBar = new HeaderUI();
-
-        //GRID PANE LEFT
-        //set basic grid pane left
-        GridPane leftBasicGrid = new GridPane();
-        leftBasicGrid.setPrefWidth(WINDOW_WIDTH / 2);
-        leftBasicGrid.setPadding(new Insets(5, 5, 10, 10));
-        leftBasicGrid.setHgap(10);
-        leftBasicGrid.setVgap(1);
-
-        //set birdTable
-        List<Bird> birdList = readBirdDataFromTSVFile("/twittrfx/birds_of_switzerland.tsv");
-        TableUI birdTable = new TableUI(birdList);
-
-        //update texts
+        birdList = readBirdDataFromTSVFile("/twittrfx/birds_of_switzerland.tsv");
+        birdTable = new TableUI(birdList);
         updateRowCountText(birdList);
         updateHighestSpeedText(birdList);
 
-        //populate leftBasicGrid
-        leftBasicGrid.add(new TitleTextUI(""), 0, 0);
-        leftBasicGrid.add(titleText, 0, 1, 2, 1);
-        leftBasicGrid.add(new CategoryTextUI("Amount of bird species:"), 0, 2);
-        leftBasicGrid.add(rowCountText, 1, 2);
-        leftBasicGrid.add(new CategoryTextUI("Highest top speed:"), 0, 3);
-        leftBasicGrid.add(highestSpeedText, 1, 3);
-        leftBasicGrid.add(new TitleTextUI(""), 0, 4);
-        leftBasicGrid.add(birdTable, 0, 5, 3, 1);
+        birdImage = new ImageView();
 
-        //GRID PANE RIGHT
-        //set basic grid pane right
-        GridPane rightBasicGrid = new GridPane();
-        rightBasicGrid.setPrefWidth(WINDOW_WIDTH / 2);
-        rightBasicGrid.setPadding(new Insets(5, 10, 10, 5));
-        rightBasicGrid.setHgap(10);
-        rightBasicGrid.setVgap(1);
+        rightTFGridTitle = Arrays.asList(
+                "Name", "Short Description", "Population Size", "Top Speed",
+                "Length", "Continents", "Diet", "Seasonal Behaviour",
+                "Population Trend", "Image");
+        birdProperties = new ArrayList<>();
+        rightTFGridTitleCol3 = Arrays.asList(
+                "", null, "Maximum Life Span", "Weight", "Wingspan",
+                "Incubation Period", null, "Independent Age", "Population Status");
+        birdProperties2 = new ArrayList<>();
 
-        //set vbox to top of grid pane right
-        VBox topRightBox1 = new VBox();
-        VBox topRightBox2 = new VBox();
+    col1 = new ColumnConstraints();
+    col2 = new ColumnConstraints();
+    col3 = new ColumnConstraints();
+    col4 = new ColumnConstraints();
+    }
 
-        topRightBox1.setMinHeight(WINDOW_HEIGHT / 3);
-        topRightBox1.setMaxHeight(WINDOW_HEIGHT / 3);
-        topRightBox1.setPrefWidth(WINDOW_WIDTH / 4);
-        topRightBox2.setMinHeight(WINDOW_HEIGHT / 3);
-        topRightBox2.setMaxHeight(WINDOW_HEIGHT / 3);
-        topRightBox2.setPrefWidth(WINDOW_WIDTH / 4);
+    private void layoutControls() {
+        //Set splitPanePositions
+        splitPane.setDividerPositions(0.5);
 
-        //add the vboxes to the right basic Grid
-        rightBasicGrid.add(new TitleTextUI(""), 0, 0);
-        rightBasicGrid.add(topRightBox1, 0, 1);
-        rightBasicGrid.add(topRightBox2, 1, 1);
+        //vBox leftPane and rightPane
+        leftPane.setPrefSize(WINDOW_WIDTH / 2, WINDOW_HEIGHT * 0.9);
+        rightPane.setPrefSize(WINDOW_WIDTH / 2, WINDOW_HEIGHT * 0.9);
 
-        //create a vBox for the first Column
-        VBox firstColumn = new VBox();
-        firstColumn.setMinHeight(WINDOW_HEIGHT / 3 * 2);
-        firstColumn.setMaxWidth(WINDOW_WIDTH / 2 / 5);
+        //VBox leftOverview
+        leftOverview.setMinHeight(WINDOW_HEIGHT / 8);
+        leftOverview.setPadding(new Insets(20, 0, 5, 10));
 
-        //create a vBox for the second Column
-        VBox secondColumn = new VBox();
-        firstColumn.setMinHeight(WINDOW_HEIGHT / 3 * 2);
-        firstColumn.setMaxWidth(WINDOW_WIDTH / 2 / 5);
+        //HBox rightOverview
+        rightOverview.setMinHeight(WINDOW_HEIGHT / 9 * 4);
+        rightOverview.setPadding(new Insets(20, 10, 5, 10));
+        rightOverview.setSpacing(10);
 
-        //create a list with all the fix labels
-        List<Label> catTitles = new ArrayList<>();
-        catTitles.add(new Label("Name"));
-        catTitles.add(new Label("Short Description"));
-        catTitles.add(new Label("Population Size"));
-        catTitles.add(new Label("Top Speed"));
-        catTitles.add(new Label("Length"));
-        catTitles.add(new Label("Continents"));
-        catTitles.add(new Label("Diet"));
-        catTitles.add(new Label("Seasonal Behaviour"));
-        catTitles.add(new Label("Population Trend"));
-        catTitles.add(new Label("Image"));
+        //rightTitleBox
+        rightBirdTitle.getStyleClass().add("bird-title-label");
+        rightTitleBox.add(rightBirdTitle, 0, 0);
+        rightSubtitleContinents.getStyleClass().add("category-text");
+        rightSubtitleContinents.setWrapText(true);
+        rightSubtitleContinents.setMinWidth(WINDOW_WIDTH / 2 / 3 * 1.5);
+        rightTitleBox.add(rightSubtitleContinents, 0, 1);
+        birdImage.setFitWidth(WINDOW_WIDTH / 2 / 3 * 1.5);
+        birdImage.setPreserveRatio(true);
+        rightTitleBox.add(birdImage, 1, 1, 1, 20);
 
-        //add the list to the first column vbox
-        for (Label l : catTitles) {
-            l.setPrefHeight(WINDOW_HEIGHT / 3 * 2 / 14);
-            firstColumn.getChildren().add(l);
+        //rightTextFieldGrid
+        rightTextFieldGrid.setPadding(new Insets(10, 10, 5, 10));
+        rightTextFieldGrid.setVgap(6);
+        rightTextFieldGrid.setHgap(10);
+        col1.setPercentWidth(20);
+        col2.setPercentWidth(30);
+        col3.setPercentWidth(20);
+        col4.setPercentWidth(30);
+        rightTextFieldGrid.getColumnConstraints().addAll(col1,col2,col3,col4);
+
+        //add right TextFieldGrid 1st Column Labels
+        int i = 0;
+        for (String s : rightTFGridTitle) {
+            rightTextFieldGrid.add(new Label(s), 0, i);
+            rightTextFieldGrid.setMinHeight(10);
+            getStyleClass().add("table-text");
+            i++;
+        }
+        //add 2nd Column TextFields
+        for (i = 0; i < rightTFGridTitle.size(); i++) {
+            birdProperties.add(new TextField());
+            getStyleClass().add("text-field");
+        }
+        i = 0;
+        for (TextField tf : birdProperties) {
+            if (i == 1 || i == 6 || i == 9) {
+                GridPane.setColumnSpan(tf, 3);
+            }
+            rightTextFieldGrid.add(tf, 1, i);
+            i++;
+        }
+        //add right TextFieldGrid 3rd Column Labels
+        i = 0;
+        for (String r : rightTFGridTitleCol3) {
+            if (!(r == null)) {
+                rightTextFieldGrid.add(new Label(r), 2, i);
+                rightTextFieldGrid.setMinHeight(10);
+                getStyleClass().add("table-text");
+            }
+            i++;
+        }
+        //add 4th Column TextFields
+        for (i = 1; i < rightTFGridTitle.size(); i++) {
+            birdProperties2.add(new TextField());
+            getStyleClass().add("text-field");
         }
 
-        //add the first column to the right basic grid
-        rightBasicGrid.add(firstColumn, 0, 11);
+        i = 1;
+        for (TextField tf : birdProperties2) {
+                rightTextFieldGrid.add(tf, 3, i);
+            i++;
+        }
 
-        //Create labels for the bird title on the right side
-        Label birdTitleLabel = new Label();
-        birdTitleLabel.getStyleClass().add("bird-title-label");
+        //add left subtitleBox
+        subtitleBox.setHgap(10);
+        subtitleBox.setPadding(new Insets(5, 0, 20, 0));
+        subtitleBox.add(new CategoryTextUI("Amount of bird species:"), 0, 0);
+        subtitleBox.add(rowCountText, 1, 0);
+        subtitleBox.add(new CategoryTextUI("Highest top speed:"), 0, 1);
+        subtitleBox.add(highestSpeedText, 1, 1);
 
-        //create a label for the continents on the right side
-        Label continentsLabel = new Label();
-        continentsLabel.setWrapText(true);
+//        COLLECT
+        leftOverview.getChildren().addAll(leftTitle, subtitleBox);
+        rightOverview.getChildren().add(rightTitleBox);
 
-        //create bindings for the top right side labels
+        //leftPane holds leftOverview and table
+        leftPane.getChildren().addAll(leftOverview, birdTable);
+        //rightPane holds rightOverview
+        rightPane.getChildren().addAll(rightOverview, rightTextFieldGrid);
+
+        //splitPane holds leftPane and rightPane
+        splitPane.getItems().addAll(leftPane, rightPane);
+
+        //VBox to hold SplitPane and HeaderBar
+        VBox root = new VBox(headerBar, splitPane);
+
+        getChildren().add(root);
+    }
+
+
+    private void setupEventHandlers() {
+    }
+
+    private void setupValueChangedListeners() {
+    }
+
+    private void setupBindings() {
+        //setup bindings for rightOverview
         birdTable.getTableView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                birdTitleLabel.setText(newValue.getName());
-                continentsLabel.setText(newValue.getContinents());
-                Image birdImg = new Image(newValue.getImage());
+                rightBirdTitle.setText(newValue.getName());
+                rightSubtitleContinents.setText(newValue.getContinents());
+                birdImg = new Image(newValue.getImage());
                 birdImage.setImage(birdImg);
             } else {
-                // No selection, clear the label
-                birdTitleLabel.setText("");
-                continentsLabel.setText("");
+                rightBirdTitle.setText("");
+                rightSubtitleContinents.setText("");
                 birdImage.setImage(null);
             }
         });
 
-        //add the bound labels to the top right vboxes
-        topRightBox1.getChildren().addAll(birdTitleLabel, continentsLabel);
-        topRightBox2.getChildren().addAll(birdImage);
-
-        //create Arraylist with TextFields
-        List<TextField> birdProperties = new ArrayList<TextField>();
-        birdProperties.add(new TextField("birdName"));
-        birdProperties.add(new TextField("birdDescription"));
-        birdProperties.add(new TextField("birdPopulationSize"));
-        birdProperties.add(new TextField("birdTopSpeed"));
-        birdProperties.add(new TextField("birdLength"));
-        birdProperties.add(new TextField("birdContinents"));
-        birdProperties.add(new TextField("birdDiet"));
-        birdProperties.add(new TextField("birdSeasonalBehaviour"));
-        birdProperties.add(new TextField("birdPopulationTrend"));
-        birdProperties.add(new TextField("birdImage"));
-
-        //create bindings for the second column bottom right
+        //setup bindings for 2nd Column
         birdTable.getTableView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 birdProperties.get(0).setText(newValue.getName());
@@ -201,41 +248,20 @@ public class ApplicationUI extends HBox {
             }
         });
 
-        //add the list to the second column vbox
-        for (TextField t : birdProperties) {
-            t.setPrefHeight(WINDOW_HEIGHT / 3 * 2 / 14);
-            secondColumn.getChildren().add(t);
-        }
-
-        //add the first column to the right basic grid
-        rightBasicGrid.add(secondColumn, 1, 11);
-
-
-        //add children to windowFrame
-        windowFrame.getItems().addAll(leftBasicGrid, rightBasicGrid);
-
-        //add headerBar
-        HeaderUI header = new HeaderUI();
-
-        //create VBox to hold HeaderBar and SplitPane
-        VBox rootBox = new VBox(headerBar, windowFrame);
-
-        //display windowFrame
-        getChildren().add(rootBox);
-
-//        rightBasicGrid.setGridLinesVisible(true);
-//        leftBasicGrid.setGridLinesVisible(true);
-
-    }
-
-
-    private void setupEventHandlers() {
-    }
-
-    private void setupValueChangedListeners() {
-    }
-
-    private void setupBindings() {
+        //setup bindings for 4th Column
+        birdTable.getTableView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                birdProperties2.get(0).setText(null);
+                birdProperties2.get(1).setText(newValue.getMaximumLifeSpanInYears());
+                birdProperties2.get(2).setText(newValue.getWeight());
+                birdProperties2.get(3).setText(newValue.getWingspan());
+                birdProperties2.get(4).setText(newValue.getIncubationPeriod());
+                birdProperties2.get(5).setText(null);
+                birdProperties2.get(6).setText(newValue.getIndependentAge());
+                birdProperties2.get(7).setText(newValue.getPopulationStatus());
+                birdProperties2.get(8).setText(null);
+            }
+        });
     }
 
     private List<Bird> readBirdDataFromTSVFile(String filePath) {
