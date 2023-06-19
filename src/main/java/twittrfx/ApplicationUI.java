@@ -390,21 +390,6 @@ public class ApplicationUI extends HBox {
     }
 
     private void saveUpdatedBirdToTSV(Bird updatedBird, String filePath) {
-//            try {
-//                URL url = getClass().getResource(filePath);
-//                Path path = Paths.get(url.toURI());
-//                BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-//
-//                // Write the updated bird data to the file
-//                writer.write(updatedBird.getName() + "\t" + updatedBird.getPopulationTrend() + "\t" + updatedBird.getPopulationStatus());
-//                writer.newLine();
-//
-//                writer.close();
-//            } catch (IOException | URISyntaxException e) {
-//                e.printStackTrace();
-//            }
-
-
         try {
             Path path = Paths.get(filePath);
             List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
