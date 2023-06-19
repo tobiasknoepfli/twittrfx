@@ -345,12 +345,12 @@ public class ApplicationUI extends HBox {
                 selectedBird.setPopulationTrend(updatedBird.getPopulationTrend());
                 selectedBird.setPopulationStatus(updatedBird.getPopulationStatus());
 
-                saveUpdatedBirdToTSV(updatedBird,"/twittrfx/birds_of_switzerland.tsv", originalName);
+                saveUpdatedBirdToTSV(updatedBird,"target/classes/twittrfx/birds_of_switzerland.tsv", originalName);
 
                 birdTable.refresh(birdList);
             } else {
                 Bird newBird = createNewBird();
-                addBirdToTSV(newBird, "/twittrfx/birds_of_switzerland.tsv");
+                addBirdToTSV(newBird, "target/classes/twittrfx/birds_of_switzerland.tsv");
 
                 birdList.add(newBird);
                 birdTable.refresh(birdList);
