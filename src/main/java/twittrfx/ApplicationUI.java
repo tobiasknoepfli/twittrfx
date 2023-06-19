@@ -20,10 +20,9 @@ import static twittrfx.AppStarter.WINDOW_WIDTH;
 public class ApplicationUI extends HBox {
 
     private final PresentationModel model;
-    private Text rowCountText, highestSpeedText, titleText;
-    private Label birdNameLabel;
+    private Text rowCountText, highestSpeedText;
     private ImageView birdImage;
-    private HeaderUI headerBar;
+    public HeaderUI headerBar;
     private SplitPane splitPane;
     private VBox leftPane, rightPane;
     private VBox leftOverview;
@@ -308,6 +307,4 @@ public class ApplicationUI extends HBox {
         highestSpeedText.setText(highestSpeed + " km/h");
         getStyleClass().add("category-text");
     }
-
-
 }

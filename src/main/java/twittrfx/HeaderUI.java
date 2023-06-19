@@ -1,6 +1,8 @@
 package twittrfx;
 
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -10,6 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class HeaderUI extends HBox {
+
+
     public HeaderUI() {
         initializeControls();
         layoutControls();
@@ -26,10 +30,10 @@ public class HeaderUI extends HBox {
 
         setPadding(new Insets(10));
         setSpacing(10);
-        getChildren().add(titleLabel);
+        getChildren().addAll(titleLabel);
     }
 
     private void layoutControls() {
-        // No additional layout needed since this class extends HBox
+
     }
 }
