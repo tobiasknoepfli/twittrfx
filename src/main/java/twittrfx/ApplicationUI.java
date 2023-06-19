@@ -426,7 +426,6 @@ public class ApplicationUI extends HBox {
             e.printStackTrace();
         }
     }
-
 }
 
 
