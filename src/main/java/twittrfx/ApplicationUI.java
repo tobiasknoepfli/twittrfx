@@ -294,6 +294,7 @@ public class ApplicationUI extends HBox {
                 birdProperties.get(8).setText(newValue.getPopulationTrend());
                 birdProperties.get(9).setText(newValue.getImage());
             }
+            originalName = new String(birdProperties.get(0).getText());
         });
 
         //setup bindings for 4th Column
@@ -336,7 +337,6 @@ public class ApplicationUI extends HBox {
 
         saveBird.setOnAction(event -> {
             int index = birdTable.getTableView().getSelectionModel().getSelectedIndex();
-            originalName = new String(birdProperties.get(0).getText());
             if (index >= 0) {
                 Bird selectedBird = birdList.get(index);
                 Bird updatedBird = updatedBird();
@@ -444,21 +444,32 @@ public class ApplicationUI extends HBox {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            boolean birdUpdated = false;
+
             for (String line : lines) {
                 String[] parts = line.split("\t");
                 if (parts.length > 0 && parts[0].equals(originalName)) {
                     writer.write(bird.toTSVString());
                     writer.newLine();
+                    birdUpdated = true;
                 } else {
                     writer.write(line);
                     writer.newLine();
                 }
             }
+
+            if (!birdUpdated) {
+                // If the bird was not found in the file, add it as a new entry
+                writer.write(bird.toTSVString());
+                writer.newLine();
+            }
+
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }
 
 
