@@ -1,6 +1,7 @@
 package twittrfx;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
@@ -41,6 +42,7 @@ public class ApplicationUI extends HBox {
     private List<String> rightTFGridTitleCol3;
     private ArrayList<TextField> birdProperties2;
     private ColumnConstraints col1, col2, col3, col4;
+    private Button newBird,saveBird, deleteBird;
 
 
     public ApplicationUI(PresentationModel model) {
@@ -60,6 +62,9 @@ public class ApplicationUI extends HBox {
 
     private void initializeControls() {
         headerBar = new HeaderUI();
+        newBird = new Button("\uF0C7");
+        saveBird = new Button("\uF03C");
+        deleteBird = new Button("\uF0CE");
 
         splitPane = new SplitPane();
 
@@ -103,6 +108,12 @@ public class ApplicationUI extends HBox {
     }
 
     private void layoutControls() {
+        //add buttons to HeaderBar
+        newBird.getStyleClass().add("header-button");
+        saveBird.getStyleClass().add("header-button2");
+        deleteBird.getStyleClass().add("header-button");
+        headerBar.getChildren().addAll(newBird,saveBird,deleteBird);
+
         //Set splitPanePositions
         splitPane.setDividerPositions(0.5);
 
@@ -211,6 +222,10 @@ public class ApplicationUI extends HBox {
 
 
     private void setupEventHandlers() {
+        newBird.setOnAction(event -> {
+            birdTable.getTableView().getSelectionModel().clearSelection();
+            clearTextFields();
+        });
     }
 
     private void setupValueChangedListeners() {
@@ -306,5 +321,17 @@ public class ApplicationUI extends HBox {
                 .orElse(0.0);
         highestSpeedText.setText(highestSpeed + " km/h");
         getStyleClass().add("category-text");
+    }
+    private void clearTextFields() {
+        for (TextField tf : birdProperties) {
+            tf.clear();
+        }
+        for (TextField tf : birdProperties2) {
+            tf.clear();
+        }
+
+        if (!birdProperties.isEmpty()) {
+            birdProperties.get(0).requestFocus();
+        }
     }
 }

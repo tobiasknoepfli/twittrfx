@@ -30,6 +30,27 @@
     -fx-border-color: "00000f";
     -fx-font-family: "Candara Light";
 }
+.header-bar{
+    -fx-background-color: DARKBLUE;
+}
+.header-button{
+    -fx-text-fill: WHITE;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Wingdings 2";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+.header-button2{
+    -fx-text-fill: WHITE;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Wingdings";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
 
 
 
