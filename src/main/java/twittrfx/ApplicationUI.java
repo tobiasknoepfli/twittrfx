@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static twittrfx.AppStarter.WINDOW_HEIGHT;
 import static twittrfx.AppStarter.WINDOW_WIDTH;
@@ -50,6 +51,7 @@ public class ApplicationUI extends HBox {
     private ArrayList<TextField> birdProperties2;
     private ColumnConstraints col1, col2, col3, col4;
     private Button newBird, saveBird, deleteBird;
+    private String originalName;
 
 
     public ApplicationUI(PresentationModel model) {
@@ -333,6 +335,7 @@ public class ApplicationUI extends HBox {
 
         saveBird.setOnAction(event -> {
             int index = birdTable.getTableView().getSelectionModel().getSelectedIndex();
+            originalName = new String(birdProperties.get(0).getText());
             if (index >= 0) {
                 Bird selectedBird = birdList.get(index);
                 Bird updatedBird = updatedBird();
@@ -341,7 +344,7 @@ public class ApplicationUI extends HBox {
                 selectedBird.setPopulationTrend(updatedBird.getPopulationTrend());
                 selectedBird.setPopulationStatus(updatedBird.getPopulationStatus());
 
-                saveUpdatedBirdToTSV(updatedBird, "/twittrfx/birds_of_switzerland.tsv");
+                saveUpdatedBirdToTSV(updatedBird, "birds_of_switzerland.tsv", originalName);
 
                 birdTable.refresh(birdList);
             }
@@ -389,16 +392,17 @@ public class ApplicationUI extends HBox {
         return updatedBird;
     }
 
-    private void saveUpdatedBirdToTSV(Bird updatedBird, String filePath) {
+    private void saveUpdatedBirdToTSV(Bird updatedBird, String filePath, String originalName) {
         try {
-            Path path = Paths.get(filePath);
-            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
+            List<String> lines = new ArrayList<>();
 
-            for (int i = 1; i < lines.size(); i++) {
-                String[] data = lines.get(i).split("\t");
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\t");
 
-                if (data.length == 16 && data[0].equals(rightBirdTitle)) {
-                    // Update the fields in the data array based on the updatedBird object
+                if (data.length == 16 && data[0].equals(originalName)) {
                     data[0] = updatedBird.getName();
                     data[1] = updatedBird.getImage();
                     data[2] = updatedBird.getShortDescription();
@@ -416,16 +420,29 @@ public class ApplicationUI extends HBox {
                     data[14] = updatedBird.getPopulationStatus();
                     data[15] = updatedBird.getIncubationPeriod();
 
-                    lines.set(i, String.join("\t", data));
-                    break;
+                    line = String.join("\t", data); // Update the line with the modified data
                 }
+
+                lines.add(line);
             }
 
-            Files.write(path, lines, StandardCharsets.UTF_8);
+            reader.close();
+
+            FileWriter fileWriter = new FileWriter(filePath);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+
+            for (String updatedLine : lines) {
+                writer.write(updatedLine);
+                writer.newLine();
+            }
+
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }
 
 
