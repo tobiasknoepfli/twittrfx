@@ -40,6 +40,7 @@ public class TableUI extends BorderPane {
         table.getColumns().addAll(column1, column2, column3);
     }
 
+
     private void populateTable(List<Bird> birdList) {
         table.getItems().addAll(birdList);
         getStyleClass().add("table-text");
@@ -52,5 +53,10 @@ public class TableUI extends BorderPane {
 
     public TableView<Bird> getTableView() {
         return table;
+    }
+
+    public void refresh(List<Bird> birdList) {
+        table.getItems().clear();
+        table.getItems().addAll(birdList);
     }
 }

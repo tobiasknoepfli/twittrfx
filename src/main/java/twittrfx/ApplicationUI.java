@@ -13,7 +13,10 @@ import javafx.scene.text.Text;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -187,14 +190,16 @@ public class ApplicationUI extends HBox {
             i++;
         }
         //add 4th Column TextFields
-        for (i = 1; i < rightTFGridTitle.size(); i++) {
+        for (i = 0; i < rightTFGridTitle.size(); i++) {
             birdProperties2.add(new TextField());
             getStyleClass().add("text-field");
         }
 
-        i = 1;
+        i = 0;
         for (TextField tf : birdProperties2) {
-            rightTextFieldGrid.add(tf, 3, i);
+            if (!(i == 0 || i == 1 || i == 6 || i == 9)) {
+                rightTextFieldGrid.add(tf, 3, i);
+            }
             i++;
         }
 
@@ -224,49 +229,34 @@ public class ApplicationUI extends HBox {
         getChildren().add(root);
     }
 
+    private List<Bird> readBirdDataFromTSVFile(String filePath) {
+        List<Bird> birdList = new ArrayList<>();
 
-    private void setupEventHandlers() {
-        newBird.setOnAction(event -> {
-            birdTable.getTableView().getSelectionModel().clearSelection();
-            clearTextFields();
-        });
+        try {
+            InputStream inputStream = getClass().getResourceAsStream(filePath);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        saveBird.setOnAction(event -> {
-            int selectedIndex = birdTable.getTableView().getSelectionModel().getSelectedIndex();
-            if (selectedIndex >= 0) {
-                Bird selectedBird = birdTable.getTableView().getItems().get(selectedIndex);
-                String birdName = selectedBird.getName();
+            // Skip the header line
+            String headerLine = reader.readLine();
 
-                // Update the bird object with the changes
-                selectedBird.setName(birdProperties.get(0).getText());
-                selectedBird.setShortDescription(birdProperties.get(1).getText());
-                selectedBird.setPopulationSize(birdProperties.get(2).getText());
-                selectedBird.setTopSpeedInKmh(birdProperties.get(3).getText());
-                selectedBird.setLength(birdProperties.get(4).getText());
-                selectedBird.setContinents(birdProperties.get(5).getText());
-                selectedBird.setDiet(birdProperties.get(6).getText());
-                selectedBird.setSeasonalBehavior(birdProperties.get(7).getText());
-                selectedBird.setPopulationTrend(birdProperties.get(8).getText());
-                selectedBird.setImage(birdProperties.get(9).getText());
-                selectedBird.setMaximumLifeSpanInYears(birdProperties2.get(1).getText());
-                selectedBird.setWeight(birdProperties2.get(2).getText());
-                selectedBird.setWingspan(birdProperties2.get(3).getText());
-                selectedBird.setIncubationPeriod(birdProperties2.get(4).getText());
-                selectedBird.setIndependentAge(birdProperties2.get(6).getText());
-                selectedBird.setPopulationStatus(birdProperties2.get(7).getText());
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\t");
 
-                // Update the table view
-                birdTable.getTableView().getItems().set(selectedIndex, selectedBird);
+                if (data.length == 16) {
+                    Bird bird = new Bird(data[0], data[1], data[2], data[3], data[4], data[5], data[6],
+                            data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
 
-                // Save changes to the TSV file
-                saveBirdDataToTSVFile("/twittrfx/birds_of_switzerland.tsv");
-
-                // Clear the text fields and selection
-                clearTextFields();
-                birdTable.getTableView().getSelectionModel().clearSelection();
+                    birdList.add(bird);
+                }
             }
-        });
 
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return birdList;
     }
 
     private void setupValueChangedListeners() {
@@ -307,46 +297,17 @@ public class ApplicationUI extends HBox {
         birdTable.getTableView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 birdProperties2.get(0).setText(null);
-                birdProperties2.get(1).setText(newValue.getMaximumLifeSpanInYears());
-                birdProperties2.get(2).setText(newValue.getWeight());
-                birdProperties2.get(3).setText(newValue.getWingspan());
-                birdProperties2.get(4).setText(newValue.getIncubationPeriod());
-                birdProperties2.get(5).setText(null);
-                birdProperties2.get(6).setText(newValue.getIndependentAge());
-                birdProperties2.get(7).setText(newValue.getPopulationStatus());
-                birdProperties2.get(8).setText(null);
+                birdProperties2.get(1).setText(null);
+                birdProperties2.get(2).setText(newValue.getMaximumLifeSpanInYears());
+                birdProperties2.get(3).setText(newValue.getWeight());
+                birdProperties2.get(4).setText(newValue.getWingspan());
+                birdProperties2.get(5).setText(newValue.getIncubationPeriod());
+                birdProperties2.get(6).setText(null);
+                birdProperties2.get(7).setText(newValue.getIndependentAge());
+                birdProperties2.get(8).setText(newValue.getPopulationStatus());
+                birdProperties2.get(9).setText(null);
             }
         });
-    }
-
-    private List<Bird> readBirdDataFromTSVFile(String filePath) {
-        List<Bird> birdList = new ArrayList<>();
-
-        try {
-            InputStream inputStream = getClass().getResourceAsStream(filePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            // Skip the header line
-            String headerLine = reader.readLine();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split("\t");
-
-                if (data.length == 16) {
-                    Bird bird = new Bird(data[0], data[1], data[2], data[3], data[4], data[5], data[6],
-                            data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14], data[15]);
-
-                    birdList.add(bird);
-                }
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return birdList;
     }
 
     private void updateRowCountText(List<Bird> birdList) {
@@ -364,6 +325,29 @@ public class ApplicationUI extends HBox {
         getStyleClass().add("category-text");
     }
 
+    private void setupEventHandlers() {
+        newBird.setOnAction(event -> {
+            birdTable.getTableView().getSelectionModel().clearSelection();
+            clearTextFields();
+        });
+
+        saveBird.setOnAction(event -> {
+            int index = birdTable.getTableView().getSelectionModel().getSelectedIndex();
+            if (index >= 0) {
+                Bird selectedBird = birdList.get(index);
+                Bird updatedBird = updatedBird();
+
+                selectedBird.setName(updatedBird.getName());
+                selectedBird.setPopulationTrend(updatedBird.getPopulationTrend());
+                selectedBird.setPopulationStatus(updatedBird.getPopulationStatus());
+
+                saveUpdatedBirdToTSV(updatedBird, "/twittrfx/birds_of_switzerland.tsv");
+
+                birdTable.refresh(birdList);
+            }
+        });
+    }
+
     private void clearTextFields() {
         for (TextField tf : birdProperties) {
             tf.clear();
@@ -376,80 +360,88 @@ public class ApplicationUI extends HBox {
         }
     }
 
-    private void saveBirdDataToTSVFile(String filePath) {
+    private Bird updatedBird() {
+        Bird updatedBird = new Bird(
+                birdProperties.get(0).getText(), // Name
+                birdProperties.get(9).getText(), // Image
+
+                birdProperties.get(1).getText(), // Short Description
+                birdProperties.get(2).getText(), // Population Size
+                birdProperties2.get(2).getText(), // Maximum Lifespan
+
+                birdProperties.get(3).getText(), // Top Speed
+                birdProperties2.get(3).getText(), // Weight
+
+                birdProperties.get(4).getText(), // Length
+                birdProperties2.get(4).getText(), // Wingspan
+
+                birdProperties.get(5).getText(), // Continents
+                birdProperties2.get(5).getText(), // Diet
+
+                birdProperties.get(6).getText(), // Seasonal Behavior
+                birdProperties2.get(7).getText(), // Independent Age
+
+                birdProperties.get(8).getText(), // Population Trend
+                birdProperties2.get(8).getText(), // Population Status
+
+                birdProperties2.get(7).getText()  // Incubation Period
+        );
+        return updatedBird;
+    }
+
+    private void saveUpdatedBirdToTSV(Bird updatedBird, String filePath) {
+//            try {
+//                URL url = getClass().getResource(filePath);
+//                Path path = Paths.get(url.toURI());
+//                BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+//
+//                // Write the updated bird data to the file
+//                writer.write(updatedBird.getName() + "\t" + updatedBird.getPopulationTrend() + "\t" + updatedBird.getPopulationStatus());
+//                writer.newLine();
+//
+//                writer.close();
+//            } catch (IOException | URISyntaxException e) {
+//                e.printStackTrace();
+//            }
+
+
         try {
-            File file = new File(getClass().getResource(filePath).toURI());
+            Path path = Paths.get(filePath);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 
-            // Read the existing TSV file content
-            String existingContent = new String(Files.readAllBytes(Paths.get(file.toURI())));
+            for (int i = 1; i < lines.size(); i++) {
+                String[] data = lines.get(i).split("\t");
 
-            // Generate the new TSV content with updated bird data
-            StringBuilder newContentBuilder = new StringBuilder();
+                if (data.length == 16 && data[0].equals(rightBirdTitle)) {
+                    // Update the fields in the data array based on the updatedBird object
+                    data[0] = updatedBird.getName();
+                    data[1] = updatedBird.getImage();
+                    data[2] = updatedBird.getShortDescription();
+                    data[3] = updatedBird.getPopulationSize();
+                    data[4] = updatedBird.getMaximumLifeSpanInYears();
+                    data[5] = updatedBird.getTopSpeedInKmh();
+                    data[6] = updatedBird.getWeight();
+                    data[7] = updatedBird.getLength();
+                    data[8] = updatedBird.getWingspan();
+                    data[9] = updatedBird.getContinents();
+                    data[10] = updatedBird.getDiet();
+                    data[11] = updatedBird.getSeasonalBehavior();
+                    data[12] = updatedBird.getIndependentAge();
+                    data[13] = updatedBird.getPopulationTrend();
+                    data[14] = updatedBird.getPopulationStatus();
+                    data[15] = updatedBird.getIncubationPeriod();
 
-            // Append the header line
-            newContentBuilder.append("Name\tImage\tShort Description\tPopulation Size\tMaximum Life Span\tTop Speed\tWeight\tLength\tWingspan\tContinents\tDiet\tSeasonal Behaviour\tIndependent Age\tPopulation Trend\tPopulation Status\tIncubation Period");
-            newContentBuilder.append(System.lineSeparator());
-
-            // Append the bird data
-            for (Bird bird : birdList) {
-                if (bird.getName().equals(getBirdName())) {
-                    newContentBuilder.append(bird.getName()).append("\t");
-                    newContentBuilder.append(bird.getImage()).append("\t");
-                    newContentBuilder.append(bird.getShortDescription()).append("\t");
-                    newContentBuilder.append(bird.getPopulationSize()).append("\t");
-                    newContentBuilder.append(bird.getMaximumLifeSpanInYears()).append("\t");
-                    newContentBuilder.append(bird.getTopSpeedInKmh()).append("\t");
-                    newContentBuilder.append(bird.getWeight()).append("\t");
-                    newContentBuilder.append(bird.getLength()).append("\t");
-                    newContentBuilder.append(bird.getWingspan()).append("\t");
-                    newContentBuilder.append(bird.getContinents()).append("\t");
-                    newContentBuilder.append(bird.getDiet()).append("\t");
-                    newContentBuilder.append(bird.getSeasonalBehavior()).append("\t");
-                    newContentBuilder.append(bird.getIndependentAge()).append("\t");
-                    newContentBuilder.append(bird.getPopulationTrend()).append("\t");
-                    newContentBuilder.append(bird.getPopulationStatus()).append("\t");
-                    newContentBuilder.append(bird.getIncubationPeriod());
-                } else {
-                    newContentBuilder.append(bird.toTSVString()); // Append the original bird data
+                    lines.set(i, String.join("\t", data));
+                    break;
                 }
-                newContentBuilder.append(System.lineSeparator());
             }
 
-            // Write the new content to the TSV file
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(newContentBuilder.toString());
-            writer.close();
-        } catch (IOException | URISyntaxException e) {
+            Files.write(path, lines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String getBirdName(){
-        String birdName = rightBirdTitle.getText();
-        return birdName;
-    }
-    private String getChanges() {
-        String changedName = birdProperties.get(0).getText();
-        String changedDescription = birdProperties.get(1).getText();
-        String changedPopSize = birdProperties.get(2).getText();
-        String changedTopSpeed = birdProperties.get(3).getText();
-        String changedLength = birdProperties.get(4).getText();
-        String changedContinents = birdProperties.get(5).getText();
-        String changedDiet = birdProperties.get(6).getText();
-        String changedSeasBehaviour = birdProperties.get(7).getText();
-        String changedPopTrend = birdProperties.get(8).getText();
-        String changedImage = birdProperties.get(9).getText();
-
-        String changedLifeSpan = birdProperties2.get(1).getText();
-        String changedWeight = birdProperties2.get(2).getText();
-        String changedWingspan = birdProperties2.get(3).getText();
-        String changedIncPeriod = birdProperties2.get(4).getText();
-        String changedIndAge = birdProperties2.get(6).getText();
-        String changedPopStatus = birdProperties2.get(7).getText();
-
-        return changedName + "\t" + changedImage + "\t" + changedDescription + "\t" + changedPopSize + "\t" +
-                changedLifeSpan + "\t" + changedTopSpeed+ "\t" + changedWeight+ "\t" +changedLength+ "\t" +
-                changedWingspan+ "\t" +changedContinents+ "\t" +changedDiet+ "\t" +changedSeasBehaviour+ "\t" +
-                changedIndAge+ "\t" +changedPopTrend + "\t" + changedPopStatus+ "\t" +changedIncPeriod;
-    }
 }
+
+
