@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static twittrfx.AppStarter.WINDOW_HEIGHT;
 import static twittrfx.AppStarter.WINDOW_WIDTH;
@@ -344,8 +345,14 @@ public class ApplicationUI extends HBox {
                 selectedBird.setPopulationTrend(updatedBird.getPopulationTrend());
                 selectedBird.setPopulationStatus(updatedBird.getPopulationStatus());
 
-                saveUpdatedBirdToTSV(updatedBird, "birds_of_switzerland.tsv", originalName);
+                saveUpdatedBirdToTSV(updatedBird,"/twittrfx/birds_of_switzerland.tsv", originalName);
 
+                birdTable.refresh(birdList);
+            } else {
+                Bird newBird = createNewBird();
+                addBirdToTSV(newBird, "/twittrfx/birds_of_switzerland.tsv");
+
+                birdList.add(newBird);
                 birdTable.refresh(birdList);
             }
         });
@@ -392,57 +399,67 @@ public class ApplicationUI extends HBox {
         return updatedBird;
     }
 
-    private void saveUpdatedBirdToTSV(Bird updatedBird, String filePath, String originalName) {
+    private Bird createNewBird() {
+        Bird newBird = new Bird(
+                birdProperties.get(0).getText(), // Name
+                birdProperties.get(9).getText(), // Image
+
+                birdProperties.get(1).getText(), // Short Description
+                birdProperties.get(2).getText(), // Population Size
+                birdProperties2.get(2).getText(), // Maximum Lifespan
+
+                birdProperties.get(3).getText(), // Top Speed
+                birdProperties2.get(3).getText(), // Weight
+
+                birdProperties.get(4).getText(), // Length
+                birdProperties2.get(4).getText(), // Wingspan
+
+                birdProperties.get(5).getText(), // Continents
+                birdProperties2.get(5).getText(), // Diet
+
+                birdProperties.get(6).getText(), // Seasonal Behavior
+                birdProperties2.get(7).getText(), // Independent Age
+
+                birdProperties.get(8).getText(), // Population Trend
+                birdProperties2.get(8).getText(), // Population Status
+                ""
+        );
+
+        return newBird;
+    }
+
+    private void addBirdToTSV(Bird bird, String filePath) {
         try {
-            FileInputStream fileInputStream = new FileInputStream(filePath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
-            List<String> lines = new ArrayList<>();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split("\t");
-
-                if (data.length == 16 && data[0].equals(originalName)) {
-                    data[0] = updatedBird.getName();
-                    data[1] = updatedBird.getImage();
-                    data[2] = updatedBird.getShortDescription();
-                    data[3] = updatedBird.getPopulationSize();
-                    data[4] = updatedBird.getMaximumLifeSpanInYears();
-                    data[5] = updatedBird.getTopSpeedInKmh();
-                    data[6] = updatedBird.getWeight();
-                    data[7] = updatedBird.getLength();
-                    data[8] = updatedBird.getWingspan();
-                    data[9] = updatedBird.getContinents();
-                    data[10] = updatedBird.getDiet();
-                    data[11] = updatedBird.getSeasonalBehavior();
-                    data[12] = updatedBird.getIndependentAge();
-                    data[13] = updatedBird.getPopulationTrend();
-                    data[14] = updatedBird.getPopulationStatus();
-                    data[15] = updatedBird.getIncubationPeriod();
-
-                    line = String.join("\t", data); // Update the line with the modified data
-                }
-
-                lines.add(line);
-            }
-
-            reader.close();
-
-            FileWriter fileWriter = new FileWriter(filePath);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-
-            for (String updatedLine : lines) {
-                writer.write(updatedLine);
-                writer.newLine();
-            }
-
+            OutputStream outputStream = new FileOutputStream(filePath, true);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+            writer.write(bird.toTSVString());
+            writer.newLine();
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
+    private void saveUpdatedBirdToTSV(Bird bird, String filePath, String originalName) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            for (String line : lines) {
+                String[] parts = line.split("\t");
+                if (parts.length > 0 && parts[0].equals(originalName)) {
+                    writer.write(bird.toTSVString());
+                    writer.newLine();
+                } else {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
 
 
