@@ -170,5 +170,10 @@ public class Bird {
         this.incubationPeriod = incubationPeriod;
     }
 
-
+    public String toTSVString() {
+        return name + "\t" + image + "\t" + shortDescription + "\t" + populationSize + "\t" +
+                maximumLifeSpanInYears + "\t" + topSpeedInKmh+ "\t" + weight+ "\t" +length+ "\t" +
+                wingspan+ "\t" +continents+ "\t" +diet+ "\t" +seasonalBehavior+ "\t" +
+                independentAge+ "\t" +populationTrend + "\t" + populationStatus+ "\t" +incubationPeriod;
+}
 }

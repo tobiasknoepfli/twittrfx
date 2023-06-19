@@ -1,5 +1,6 @@
 package twittrfx;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +12,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +46,7 @@ public class ApplicationUI extends HBox {
     private List<String> rightTFGridTitleCol3;
     private ArrayList<TextField> birdProperties2;
     private ColumnConstraints col1, col2, col3, col4;
-    private Button newBird,saveBird, deleteBird;
+    private Button newBird, saveBird, deleteBird;
 
 
     public ApplicationUI(PresentationModel model) {
@@ -101,10 +105,10 @@ public class ApplicationUI extends HBox {
                 "Incubation Period", null, "Independent Age", "Population Status");
         birdProperties2 = new ArrayList<>();
 
-    col1 = new ColumnConstraints();
-    col2 = new ColumnConstraints();
-    col3 = new ColumnConstraints();
-    col4 = new ColumnConstraints();
+        col1 = new ColumnConstraints();
+        col2 = new ColumnConstraints();
+        col3 = new ColumnConstraints();
+        col4 = new ColumnConstraints();
     }
 
     private void layoutControls() {
@@ -112,7 +116,7 @@ public class ApplicationUI extends HBox {
         newBird.getStyleClass().add("header-button");
         saveBird.getStyleClass().add("header-button2");
         deleteBird.getStyleClass().add("header-button");
-        headerBar.getChildren().addAll(newBird,saveBird,deleteBird);
+        headerBar.getChildren().addAll(newBird, saveBird, deleteBird);
 
         //Set splitPanePositions
         splitPane.setDividerPositions(0.5);
@@ -149,7 +153,7 @@ public class ApplicationUI extends HBox {
         col2.setPercentWidth(30);
         col3.setPercentWidth(20);
         col4.setPercentWidth(30);
-        rightTextFieldGrid.getColumnConstraints().addAll(col1,col2,col3,col4);
+        rightTextFieldGrid.getColumnConstraints().addAll(col1, col2, col3, col4);
 
         //add right TextFieldGrid 1st Column Labels
         int i = 0;
@@ -190,7 +194,7 @@ public class ApplicationUI extends HBox {
 
         i = 1;
         for (TextField tf : birdProperties2) {
-                rightTextFieldGrid.add(tf, 3, i);
+            rightTextFieldGrid.add(tf, 3, i);
             i++;
         }
 
@@ -226,6 +230,43 @@ public class ApplicationUI extends HBox {
             birdTable.getTableView().getSelectionModel().clearSelection();
             clearTextFields();
         });
+
+        saveBird.setOnAction(event -> {
+            int selectedIndex = birdTable.getTableView().getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                Bird selectedBird = birdTable.getTableView().getItems().get(selectedIndex);
+                String birdName = selectedBird.getName();
+
+                // Update the bird object with the changes
+                selectedBird.setName(birdProperties.get(0).getText());
+                selectedBird.setShortDescription(birdProperties.get(1).getText());
+                selectedBird.setPopulationSize(birdProperties.get(2).getText());
+                selectedBird.setTopSpeedInKmh(birdProperties.get(3).getText());
+                selectedBird.setLength(birdProperties.get(4).getText());
+                selectedBird.setContinents(birdProperties.get(5).getText());
+                selectedBird.setDiet(birdProperties.get(6).getText());
+                selectedBird.setSeasonalBehavior(birdProperties.get(7).getText());
+                selectedBird.setPopulationTrend(birdProperties.get(8).getText());
+                selectedBird.setImage(birdProperties.get(9).getText());
+                selectedBird.setMaximumLifeSpanInYears(birdProperties2.get(1).getText());
+                selectedBird.setWeight(birdProperties2.get(2).getText());
+                selectedBird.setWingspan(birdProperties2.get(3).getText());
+                selectedBird.setIncubationPeriod(birdProperties2.get(4).getText());
+                selectedBird.setIndependentAge(birdProperties2.get(6).getText());
+                selectedBird.setPopulationStatus(birdProperties2.get(7).getText());
+
+                // Update the table view
+                birdTable.getTableView().getItems().set(selectedIndex, selectedBird);
+
+                // Save changes to the TSV file
+                saveBirdDataToTSVFile("/twittrfx/birds_of_switzerland.tsv");
+
+                // Clear the text fields and selection
+                clearTextFields();
+                birdTable.getTableView().getSelectionModel().clearSelection();
+            }
+        });
+
     }
 
     private void setupValueChangedListeners() {
@@ -322,6 +363,7 @@ public class ApplicationUI extends HBox {
         highestSpeedText.setText(highestSpeed + " km/h");
         getStyleClass().add("category-text");
     }
+
     private void clearTextFields() {
         for (TextField tf : birdProperties) {
             tf.clear();
@@ -329,9 +371,85 @@ public class ApplicationUI extends HBox {
         for (TextField tf : birdProperties2) {
             tf.clear();
         }
-
         if (!birdProperties.isEmpty()) {
             birdProperties.get(0).requestFocus();
         }
+    }
+
+    private void saveBirdDataToTSVFile(String filePath) {
+        try {
+            File file = new File(getClass().getResource(filePath).toURI());
+
+            // Read the existing TSV file content
+            String existingContent = new String(Files.readAllBytes(Paths.get(file.toURI())));
+
+            // Generate the new TSV content with updated bird data
+            StringBuilder newContentBuilder = new StringBuilder();
+
+            // Append the header line
+            newContentBuilder.append("Name\tImage\tShort Description\tPopulation Size\tMaximum Life Span\tTop Speed\tWeight\tLength\tWingspan\tContinents\tDiet\tSeasonal Behaviour\tIndependent Age\tPopulation Trend\tPopulation Status\tIncubation Period");
+            newContentBuilder.append(System.lineSeparator());
+
+            // Append the bird data
+            for (Bird bird : birdList) {
+                if (bird.getName().equals(getBirdName())) {
+                    newContentBuilder.append(bird.getName()).append("\t");
+                    newContentBuilder.append(bird.getImage()).append("\t");
+                    newContentBuilder.append(bird.getShortDescription()).append("\t");
+                    newContentBuilder.append(bird.getPopulationSize()).append("\t");
+                    newContentBuilder.append(bird.getMaximumLifeSpanInYears()).append("\t");
+                    newContentBuilder.append(bird.getTopSpeedInKmh()).append("\t");
+                    newContentBuilder.append(bird.getWeight()).append("\t");
+                    newContentBuilder.append(bird.getLength()).append("\t");
+                    newContentBuilder.append(bird.getWingspan()).append("\t");
+                    newContentBuilder.append(bird.getContinents()).append("\t");
+                    newContentBuilder.append(bird.getDiet()).append("\t");
+                    newContentBuilder.append(bird.getSeasonalBehavior()).append("\t");
+                    newContentBuilder.append(bird.getIndependentAge()).append("\t");
+                    newContentBuilder.append(bird.getPopulationTrend()).append("\t");
+                    newContentBuilder.append(bird.getPopulationStatus()).append("\t");
+                    newContentBuilder.append(bird.getIncubationPeriod());
+                } else {
+                    newContentBuilder.append(bird.toTSVString()); // Append the original bird data
+                }
+                newContentBuilder.append(System.lineSeparator());
+            }
+
+            // Write the new content to the TSV file
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(newContentBuilder.toString());
+            writer.close();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getBirdName(){
+        String birdName = rightBirdTitle.getText();
+        return birdName;
+    }
+    private String getChanges() {
+        String changedName = birdProperties.get(0).getText();
+        String changedDescription = birdProperties.get(1).getText();
+        String changedPopSize = birdProperties.get(2).getText();
+        String changedTopSpeed = birdProperties.get(3).getText();
+        String changedLength = birdProperties.get(4).getText();
+        String changedContinents = birdProperties.get(5).getText();
+        String changedDiet = birdProperties.get(6).getText();
+        String changedSeasBehaviour = birdProperties.get(7).getText();
+        String changedPopTrend = birdProperties.get(8).getText();
+        String changedImage = birdProperties.get(9).getText();
+
+        String changedLifeSpan = birdProperties2.get(1).getText();
+        String changedWeight = birdProperties2.get(2).getText();
+        String changedWingspan = birdProperties2.get(3).getText();
+        String changedIncPeriod = birdProperties2.get(4).getText();
+        String changedIndAge = birdProperties2.get(6).getText();
+        String changedPopStatus = birdProperties2.get(7).getText();
+
+        return changedName + "\t" + changedImage + "\t" + changedDescription + "\t" + changedPopSize + "\t" +
+                changedLifeSpan + "\t" + changedTopSpeed+ "\t" + changedWeight+ "\t" +changedLength+ "\t" +
+                changedWingspan+ "\t" +changedContinents+ "\t" +changedDiet+ "\t" +changedSeasBehaviour+ "\t" +
+                changedIndAge+ "\t" +changedPopTrend + "\t" + changedPopStatus+ "\t" +changedIncPeriod;
     }
 }
