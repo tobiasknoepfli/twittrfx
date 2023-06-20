@@ -1,6 +1,5 @@
 package twittrfx;
 
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,8 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,15 +18,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import static twittrfx.AppStarter.WINDOW_HEIGHT;
 import static twittrfx.AppStarter.WINDOW_WIDTH;
 
 public class ApplicationUI extends HBox {
 
-    private final PresentationModel model;
+//    private final PresentationModel model;
     private Text rowCountText, highestSpeedText;
     private ImageView birdImage;
     public HeaderUI headerBar;
