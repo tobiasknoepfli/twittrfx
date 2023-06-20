@@ -24,7 +24,7 @@ import static twittrfx.AppStarter.WINDOW_WIDTH;
 
 public class ApplicationUI extends HBox {
 
-//    private final PresentationModel model;
+    private final PresentationModel model;
     private Text rowCountText, highestSpeedText;
     private ImageView birdImage;
     public HeaderUI headerBar;
