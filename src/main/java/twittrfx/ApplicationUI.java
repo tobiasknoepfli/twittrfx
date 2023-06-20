@@ -129,7 +129,7 @@ public class ApplicationUI extends HBox {
         buttonBox.getChildren().addAll(newBird, saveBird, deleteBird);
 
         //add BorderPane to HeaderBar
-        headerPane.setMinWidth(WINDOW_WIDTH*0.95);
+        headerPane.setMinWidth(WINDOW_WIDTH * 0.95);
         headerPane.setLeft(buttonBox);
         headerPane.setRight(toggleDarkMode);
 

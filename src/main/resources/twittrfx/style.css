@@ -125,5 +125,5 @@
 
 .split-pane:horizontal > .split-pane-divider {
     -fx-border-color: transparent #D3D3D3 transparent #D3D3D3;
-    -fx-background-color: transparent, derive(#696969,90%);
+    -fx-background-color: transparent, derive(#696969, 90%);
 }

@@ -24,6 +24,6 @@ public class DarkModeController extends ToggleButton {
 
 
     private void buttonText() {
-            setText("Dark Mode Disabled");
+        setText("Dark Mode Disabled");
     }
 }

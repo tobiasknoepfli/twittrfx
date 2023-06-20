@@ -17,7 +17,7 @@ public class HeaderUI extends HBox {
 
         setMaxHeight(30);
 
-        setPadding(new Insets(5,10,5,10));
+        setPadding(new Insets(5, 10, 5, 10));
         setSpacing(10);
     }
 
