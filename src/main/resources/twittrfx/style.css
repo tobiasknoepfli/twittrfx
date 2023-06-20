@@ -1,7 +1,43 @@
 .root {
+    -fx-background-color: #FFFFF0;
     -fx-padding: 0;
     -fx-font-family: "Candara";
-    -fx-font-size: 12
+    -fx-font-size: 12;
+}
+.split-pane{
+    -fx-background-color: #FFFFF0;
+}
+.header-bar{
+    -fx-background-color: #191970;
+}
+.header-button{
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Wingdings 2";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+.header-button2{
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Wingdings";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+.toggle-button{
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Candara";
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+    -fx-border-color: #FFFFF0;
+    -fx-border-radius: 3px;
+    -fx-padding: 3;
 }
 
 .title-text {
@@ -12,10 +48,6 @@
 
 .category-text {
     -fx-font-size: 14;
-}
-
-.table-text {
-    -fx-font-family: "Candara Light";
 }
 
 .bird-title-label {
@@ -30,27 +62,22 @@
     -fx-border-color: "00000f";
     -fx-font-family: "Candara Light";
 }
-.header-bar{
-    -fx-background-color: DARKBLUE;
+
+
+.table-view {
+    -fx-background-color: #FFFFF0;
 }
-.header-button{
-    -fx-text-fill: WHITE;
-    -fx-background-color: "transparent";
-    -fx-font-family: "Wingdings 2";
-    -fx-font-weight: bold;
-    -fx-font-size: 25;
-    -fx-cursor: hand;
-    -fx-padding: 1;
+.table-cell {
+    -fx-padding: 2px;
 }
-.header-button2{
-    -fx-text-fill: WHITE;
-    -fx-background-color: "transparent";
-    -fx-font-family: "Wingdings";
-    -fx-font-weight: bold;
-    -fx-font-size: 25;
-    -fx-cursor: hand;
-    -fx-padding: 1;
+.table-header {
+    -fx-background-color: #4169E1;
 }
+.table-row-cell:selected {
+    -fx-background-color: #2F4F4F;
+}
+
+
 
 
 

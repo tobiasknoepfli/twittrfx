@@ -1,0 +1,118 @@
+.root {
+    -fx-background-color: #00008B;
+    -fx-padding: 0;
+    -fx-font-family: "Candara";
+    -fx-font-size: 12;
+    -fx-text-fill: #FFFFF0;
+}
+.title-textUI{
+    -fx-text-fill: #FFFFFF;
+}
+.leftOverview{
+    -fx-text-fill: #FFFFFF !important;
+}
+
+
+.GridPane{
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: "transparent";
+}
+
+.HBox{
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: "transparent";
+}
+
+.VBox{
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: "transparent";
+}
+
+.label {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: "transparent";
+}
+
+.text-area{
+    -fx-text-fill: #FFFFFF;
+}
+
+.title-text {
+    -fx-font-size: 27;
+    -fx-font-weight: bold;
+    -fx-font-family: "Candara";
+    -fx-text-fill: #F0FFFF;
+}
+
+.split-pane{
+    -fx-background-color: #222222;
+    -fx-text-fill: #FFFFF0;
+}
+.header-bar{
+    -fx-background-color: #000000;
+}
+.header-button{
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Wingdings 2";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+.header-button2{
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Wingdings";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+.toggle-button{
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+    -fx-font-family: "Candara";
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+    -fx-border-color: #FFFFF0;
+    -fx-border-radius: 3px;
+    -fx-padding: 3;
+}
+
+
+
+.category-text {
+    -fx-font-size: 14;
+    -fx-text-fill: #FFFFF0;
+}
+
+.bird-title-label {
+    -fx-font-size: 27;
+    -fx-font-weight: bold;
+    -fx-font-family: "Candara";
+    -fx-text-fill: #FFFFF0;
+}
+
+.table-view {
+    -fx-background-color: #222222;
+    -fx-text-fill: #222222;
+}
+
+.table-row-cell {
+    -fx-background-color: #222222;
+}
+
+.table-cell {
+    -fx-text-fill: #FFFFF0;
+}
+
+.text-field {
+    -fx-text-fill: #FFFFF0;
+    -fx-background-color: "transparent";
+}
+.table-row-cell:selected {
+    -fx-background-color: #2F4F4F;
+}
+

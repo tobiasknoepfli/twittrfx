@@ -9,6 +9,7 @@ public class PresentationModel {
     private final StringProperty applicationTitle = new SimpleStringProperty("JavaFX App");
     private final ObjectProperty<Bird> selectedBird = new SimpleObjectProperty<>();
     private final ObservableList<Bird> birdList = FXCollections.observableArrayList();
+    private boolean darkModeEnabled;
 
     public String getApplicationTitle() {
         return applicationTitle.get();
@@ -36,5 +37,13 @@ public class PresentationModel {
 
     public ObservableList<Bird> getBirdList() {
         return birdList;
+    }
+
+    public boolean isDarkModeEnabled() {
+        return darkModeEnabled;
+    }
+
+    public void setDarkModeEnabled(boolean darkModeEnabled) {
+        this.darkModeEnabled = darkModeEnabled;
     }
 }

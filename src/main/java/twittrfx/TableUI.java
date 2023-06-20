@@ -43,7 +43,6 @@ public class TableUI extends BorderPane {
 
     private void populateTable(List<Bird> birdList) {
         table.getItems().addAll(birdList);
-        getStyleClass().add("table-text");
     }
 
     private void layoutControls() {

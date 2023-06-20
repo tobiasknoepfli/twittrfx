@@ -9,6 +9,7 @@ public class AppStarter extends Application {
     public static double WINDOW_WIDTH = 1400;
     public static double WINDOW_HEIGHT = 800;
 
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 

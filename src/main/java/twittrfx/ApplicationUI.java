@@ -1,10 +1,9 @@
 package twittrfx;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -48,7 +47,10 @@ public class ApplicationUI extends HBox {
     private ColumnConstraints col1, col2, col3, col4;
     private Button newBird, saveBird, deleteBird;
     private String originalName;
-
+    private DarkModeController toggleDarkMode;
+    private BorderPane headerPane;
+    private HBox buttonBox;
+    private String stylesheet;
 
     public ApplicationUI(PresentationModel model) {
         this.model = model;
@@ -61,15 +63,19 @@ public class ApplicationUI extends HBox {
     }
 
     private void initializeSelf() {
-        String stylesheet = getClass().getResource("style.css").toExternalForm();
-        getStylesheets().add(stylesheet);
+        getStylesheets().add(getClass().getResource("style.css").toExternalForm());
     }
+
 
     private void initializeControls() {
         headerBar = new HeaderUI();
+        headerPane = new BorderPane();
+        buttonBox = new HBox();
+
         newBird = new Button("\uF0C7");
         saveBird = new Button("\uF03C");
         deleteBird = new Button("\uF0CE");
+        toggleDarkMode = new DarkModeController(model);
 
         splitPane = new SplitPane();
 
@@ -117,7 +123,16 @@ public class ApplicationUI extends HBox {
         newBird.getStyleClass().add("header-button");
         saveBird.getStyleClass().add("header-button2");
         deleteBird.getStyleClass().add("header-button");
-        headerBar.getChildren().addAll(newBird, saveBird, deleteBird);
+        toggleDarkMode.getStyleClass().add("toggle-button");
+
+        buttonBox.getChildren().addAll(newBird, saveBird, deleteBird);
+
+        //add BorderPane to HeaderBar
+        headerPane.setMinWidth(WINDOW_WIDTH*0.95);
+        headerPane.setLeft(buttonBox);
+        headerPane.setRight(toggleDarkMode);
+
+        headerBar.getChildren().add(headerPane);
 
         //Set splitPanePositions
         splitPane.setDividerPositions(0.5);
@@ -366,6 +381,18 @@ public class ApplicationUI extends HBox {
                 birdList.remove(index);
                 birdTable.refresh(birdList);
                 clearTextFields();
+            }
+        });
+
+        toggleDarkMode.setOnAction(event -> {
+            if (toggleDarkMode.isSelected()) {
+                getStylesheets().clear();
+                getStylesheets().add(getClass().getResource("dark-mode.css").toExternalForm());
+                toggleDarkMode.setText("Dark Mode Enabled");
+            } else {
+                getStylesheets().clear();
+                getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                toggleDarkMode.setText("Dark Mode Disabled");
             }
         });
 
