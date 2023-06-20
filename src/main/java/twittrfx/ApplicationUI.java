@@ -348,14 +348,28 @@ public class ApplicationUI extends HBox {
                 saveUpdatedBirdToTSV(updatedBird, "target/classes/twittrfx/birds_of_switzerland.tsv", originalName);
 
                 birdTable.refresh(birdList);
+                clearTextFields();
             } else {
                 Bird newBird = createNewBird();
                 addBirdToTSV(newBird, "target/classes/twittrfx/birds_of_switzerland.tsv");
 
                 birdList.add(newBird);
                 birdTable.refresh(birdList);
+                clearTextFields();
             }
         });
+
+        deleteBird.setOnAction(event -> {
+            int index = birdTable.getTableView().getSelectionModel().getSelectedIndex();
+            if (index >= 0) {
+                Bird selectedBird = birdList.get(index);
+                deleteBirdFromTSV(selectedBird, "target/classes/twittrfx/birds_of_switzerland.tsv");
+                birdList.remove(index);
+                birdTable.refresh(birdList);
+                clearTextFields();
+            }
+        });
+
     }
 
     private void clearTextFields() {
@@ -469,6 +483,24 @@ public class ApplicationUI extends HBox {
             e.printStackTrace();
         }
     }
+
+    private void deleteBirdFromTSV(Bird bird, String filePath) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            for (String line : lines) {
+                String[] parts = line.split("\t");
+                if (parts.length > 0 && !parts[0].equals(bird.getName())) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 
