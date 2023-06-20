@@ -1,9 +1,5 @@
 package twittrfx;
 
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import twittrfx.TextUI;
-
 public class CategoryTextUI extends TextUI {
 
     public CategoryTextUI() {
