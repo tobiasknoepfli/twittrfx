@@ -24,14 +24,14 @@ import static twittrfx.AppStarter.WINDOW_WIDTH;
 public class ApplicationUI extends HBox {
 
     private final PresentationModel model;
-    private Text rowCountText, highestSpeedText;
+    private Label rowCountText, highestSpeedText;
     private ImageView birdImage;
     public HeaderUI headerBar;
     private SplitPane splitPane;
     private VBox leftPane, rightPane;
     private VBox leftOverview;
     private HBox rightOverview;
-    private TitleTextUI leftTitle;
+    private Label leftTitle;
     private GridPane subtitleBox;
     private GridPane rightTitleBox;
     private Label rightBirdTitle;
@@ -90,10 +90,11 @@ public class ApplicationUI extends HBox {
         rightSubtitleContinents = new Label();
         rightTextFieldGrid = new GridPane();
 
-        leftTitle = new TitleTextUI("Birds of Switzerland");
+        leftTitle = new Label("Birds of Switzerland");
+        leftTitle.getStyleClass().add("bird-title-label");
 
-        rowCountText = new CategoryTextUI();
-        highestSpeedText = new CategoryTextUI();
+        rowCountText = new Label();
+        highestSpeedText = new Label();
 
         birdList = readBirdDataFromTSVFile("/twittrfx/birds_of_switzerland.tsv");
         birdTable = new TableUI(birdList);
@@ -219,9 +220,9 @@ public class ApplicationUI extends HBox {
         //add left subtitleBox
         subtitleBox.setHgap(10);
         subtitleBox.setPadding(new Insets(5, 0, 20, 0));
-        subtitleBox.add(new CategoryTextUI("Amount of bird species:"), 0, 0);
+        subtitleBox.add(new Label("Amount of bird species:"), 0, 0);
         subtitleBox.add(rowCountText, 1, 0);
-        subtitleBox.add(new CategoryTextUI("Highest top speed:"), 0, 1);
+        subtitleBox.add(new Label("Highest top speed:"), 0, 1);
         subtitleBox.add(highestSpeedText, 1, 1);
 
 //        COLLECT

@@ -1,84 +1,129 @@
 .root {
-    -fx-background-color: #FFFFF0;
     -fx-padding: 0;
     -fx-font-family: "Candara";
     -fx-font-size: 12;
 }
-.split-pane{
-    -fx-background-color: #FFFFF0;
-}
-.header-bar{
-    -fx-background-color: #191970;
-}
-.header-button{
-    -fx-text-fill: #FFFFF0;
-    -fx-background-color: "transparent";
-    -fx-font-family: "Wingdings 2";
-    -fx-font-weight: bold;
-    -fx-font-size: 25;
-    -fx-cursor: hand;
-    -fx-padding: 1;
-}
-.header-button2{
-    -fx-text-fill: #FFFFF0;
-    -fx-background-color: "transparent";
-    -fx-font-family: "Wingdings";
-    -fx-font-weight: bold;
-    -fx-font-size: 25;
-    -fx-cursor: hand;
-    -fx-padding: 1;
-}
-.toggle-button{
-    -fx-text-fill: #FFFFF0;
-    -fx-background-color: "transparent";
-    -fx-font-family: "Candara";
-    -fx-font-size: 18;
-    -fx-cursor: hand;
-    -fx-padding: 1;
-    -fx-border-color: #FFFFF0;
-    -fx-border-radius: 3px;
-    -fx-padding: 3;
+
+/* general */
+
+.label {
+    -fx-text-fill: #2F4F4F;
+    -fx-background-color: transparent;
 }
 
-.title-text {
-    -fx-font-size: 27;
-    -fx-font-weight: bold;
-    -fx-font-family: "Candara";
-}
-
-.category-text {
-    -fx-font-size: 14;
+.split-pane {
+    -fx-background-color: #F8F8FF;
+    -fx-text-fill: #2F4F4F;
 }
 
 .bird-title-label {
     -fx-font-size: 27;
     -fx-font-weight: bold;
     -fx-font-family: "Candara";
+    -fx-text-fill: #2F4F4F;
 }
 
 .text-field {
-    -fx-background-color: "transparent";
+    -fx-text-fill: #2F4F4F;
+    -fx-background-color: transparent;
     -fx-border-width: 0 0 1 0;
-    -fx-border-color: "00000f";
-    -fx-font-family: "Candara Light";
+    -fx-border-color: #2F4F4F
 }
 
+/* header */
+
+.header-bar {
+    -fx-background-color: #696969;
+}
+
+.header-button {
+    -fx-text-fill: #ADD8E6;
+    -fx-background-color: transparent;
+    -fx-font-family: "Wingdings 2";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+
+.header-button2 {
+    -fx-text-fill: #ADD8E6;
+    -fx-background-color: transparent;
+    -fx-font-family: "Wingdings";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+}
+
+.toggle-button {
+    -fx-text-fill: #ADD8E6;
+    -fx-background-color: transparent;
+    -fx-font-family: "Candara";
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+    -fx-padding: 1;
+    -fx-border-color: #ADD8E6;
+    -fx-border-radius: 3px;
+    -fx-padding: 3;
+}
+
+
+/*style table*/
+.table-view .virtual-flow .scroll-bar:vertical {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+}
+
+.table-view .virtual-flow .scroll-bar:horizontal {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+}
+
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+}
+
+.table-view .corner {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+}
+
+
+.table-view .column-header-background .label {
+    -fx-background-color: linear-gradient(#A9A9A9 0%, #696969 100%);
+    -fx-text-fill: #FFFFF0;
+}
 
 .table-view {
-    -fx-background-color: #FFFFF0;
+    -fx-background-color: #FDF5E6;
+    -fx-text-fill: #2F4F4F;
 }
+
+.table-row-cell:odd {
+    -fx-background-color: #DCDCDC;
+    -fx-text-fill: #2F4F4F;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #F8F8FF;
+    -fx-text-fill: #2F4F4F;
+}
+
 .table-cell {
-    -fx-padding: 2px;
+    -fx-text-fill: #2F4F4F;
 }
-.table-header {
-    -fx-background-color: #4169E1;
-}
+
 .table-row-cell:selected {
-    -fx-background-color: #2F4F4F;
+    -fx-background-color: linear-gradient(#ADD8E6 0%, #D3D3D3 100%);
 }
 
-
-
-
-
-
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-color: transparent #D3D3D3 transparent #D3D3D3;
+    -fx-background-color: transparent, derive(#696969,90%);
+}
