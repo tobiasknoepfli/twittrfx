@@ -271,8 +271,12 @@ public class ApplicationUI extends HBox {
             if (newValue != null) {
                 rightBirdTitle.setText(newValue.getName());
                 rightSubtitleContinents.setText(newValue.getContinents());
-                birdImg = new Image(newValue.getImage());
-                birdImage.setImage(birdImg);
+                try {
+                    birdImg = new Image(newValue.getImage());
+                    birdImage.setImage(birdImg);
+                } catch (Exception e) {
+                    birdImage.setImage(null);
+                }
             } else {
                 rightBirdTitle.setText("");
                 rightSubtitleContinents.setText("");
@@ -456,29 +460,21 @@ public class ApplicationUI extends HBox {
 
     private void saveUpdatedBirdToTSV(Bird bird, String filePath, String originalName) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-            boolean birdUpdated = false;
+            Path sourceFile = Paths.get(filePath);
+
+            List<String> lines = Files.readAllLines(sourceFile, StandardCharsets.UTF_8);
+            List<String> updatedLines = new ArrayList<>();
 
             for (String line : lines) {
                 String[] parts = line.split("\t");
                 if (parts.length > 0 && parts[0].equals(originalName)) {
-                    writer.write(bird.toTSVString());
-                    writer.newLine();
-                    birdUpdated = true;
+                    updatedLines.add(bird.toTSVString());
                 } else {
-                    writer.write(line);
-                    writer.newLine();
+                    updatedLines.add(line);
                 }
             }
 
-            if (!birdUpdated) {
-                // If the bird was not found in the file, add it as a new entry
-                writer.write(bird.toTSVString());
-                writer.newLine();
-            }
-
-            writer.close();
+            Files.write(sourceFile, updatedLines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -486,21 +482,23 @@ public class ApplicationUI extends HBox {
 
     private void deleteBirdFromTSV(Bird bird, String filePath) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            Path sourceFile = Paths.get(filePath);
+
+            List<String> lines = Files.readAllLines(sourceFile, StandardCharsets.UTF_8);
+            List<String> updatedLines = new ArrayList<>();
+
             for (String line : lines) {
                 String[] parts = line.split("\t");
                 if (parts.length > 0 && !parts[0].equals(bird.getName())) {
-                    writer.write(line);
-                    writer.newLine();
+                    updatedLines.add(line);
                 }
             }
-            writer.close();
+
+            Files.write(sourceFile, updatedLines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 }
 
